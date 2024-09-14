@@ -1,154 +1,198 @@
 # CIFAR-10 Classification Using MLP and CNN Architectures
 
-We load the dataset and display some samples. The dataset contains 60,000 color images categorized into 10 classes.
+This project involves classifying the CIFAR-10 dataset using both MLP and CNN architectures, exploring the effects of various hyperparameters.
+
+## Dataset Overview
+
+The CIFAR-10 dataset consists of 60,000 color images categorized into 10 classes. Below are some sample images from the dataset:
+
 <p float="left">
   <img src="images/1.png" width="200" />
   <img src="images/2.png" width="200" />
   <img src="images/3.png" width="200" />
 </p>
-Part1: MLP model
 
-First, we use an MLP network to train a classifier. 
+---
 
-For doing so, we use stochastic mini-batch. We consider 2 hidden layers, and use trial and error to determine other hyperparameters like loss functions, learning rate, etc., to achieve more accurate results.
+## Part 1: MLP Model
 
-We transform images from (32,32,3) to 3072-dimensional vectors (32x32x3), and Normalization of pixel values to [0-1] range to make the calculations faster.
+We start by training a classifier using a Multilayer Perceptron (MLP) network. The key steps include:
 
-For our initial model, we use the following parameters:
+- Using **stochastic mini-batch** for training.
+- Defining 2 hidden layers.
+- Optimizing hyperparameters (loss function, learning rate, etc.) through trial and error.
 
-optimizer: stochastic gradient descent
-number of hidden layers: 2
-Other hyperparameters like the loss function and the learning rate were found with trial and error as below:
-loss function = categorical_crossentropy
-learning rate = 0.01
-We also used momentum (0.9) to improve my results.
+### Data Preprocessing
 
-We plot the changes in model accuracy and error for each epoch on the validation and training data. We also calculate the error, accuracy, and confusion matrix for the test data.
+- Reshape images from (32x32x3) to 3072-dimensional vectors.
+- Normalize pixel values to the [0-1] range for faster calculations.
 
-We use three batch sizes of 32, 64, and 256, and examine the effect of batch size on the accuracy and training time of the network.
+### Model Parameters
 
-for batchsize = 32:
+- **Optimizer**: Stochastic Gradient Descent (SGD)
+- **Loss Function**: Categorical Crossentropy
+- **Learning Rate**: 0.01
+- **Momentum**: 0.9
+
+We evaluated the model's accuracy and error across various epochs on both training and validation datasets.
+
+### Batch Size Experiment
+
+We tested three different batch sizes (32, 64, 256) to evaluate their impact on model performance:
+
+**Batch size = 32:**
 <p float="left">
   <img src="images/4.png" width="300" />
   <img src="images/5.png" width="300" />
 </p>
 
-for batchsize = 64:
+**Batch size = 64:**
 <p float="left">
   <img src="images/6.png" width="300" />
   <img src="images/7.png" width="300" />
 </p>
 
-for batchsize = 256:
+**Batch size = 256:**
 <p float="left">
   <img src="images/8.png" width="300" />
   <img src="images/9.png" width="300" />
 </p>
 
-As it can be seen, the accuracy is about 0.51 and each epoch takes about 4 seconds to train. So, the best results happen with the maximum batch size (256). The model is faster and has a better accuracy compared to the other 2 models.
+From the results, we found that the largest batch size (256) provided the best performance in terms of both speed and accuracy.
 
-We change the activation functions of each layer and examine their impact on network training accuracy. 
+### Activation Function Comparison
 
-Activation functions: **eLU, eLU, Softmax**
+We experimented with different activation functions for the hidden layers to observe their effect on network accuracy.
 
+**Activation functions: eLU, eLU, Softmax**
 <p float="left">
   <img src="images/10.png" width="300" />
   <img src="images/11.png" width="300" />
 </p>
-
 Confusion Matrix:
 <img src="images/12.png" width="300"/>
 
-
-Activation functions: **tanh, tanh, Softmax**
-
+**Activation functions: tanh, tanh, Softmax**
 <p float="left">
   <img src="images/13.png" width="300" />
   <img src="images/14.png" width="300" />
 </p>
-
 Confusion Matrix:
 <img src="images/15.png" width="300"/>
 
-
-Activation functions: **sigmoid, sigmoid, Softmax**
-
+**Activation functions: sigmoid, sigmoid, Softmax**
 <p float="left">
   <img src="images/16.png" width="300" />
   <img src="images/17.png" width="300" />
 </p>
-
 Confusion Matrix:
 <img src="images/18.png" width="300"/>
 
-As it can be seen, the accuracy is about 0.317 which means the sigmoid activation function is worse than the relu activation function. So, it can be concluded that the relu activation function is better than all the other choices.
+As seen above, ReLU provides the best accuracy, while sigmoid underperforms significantly.
 
+### Loss Function Experiment
 
-We hange the loss function of the network and examine the impact of different loss functions on the accuracy of network training. 
+We tested different loss functions to compare their effect on model performance:
 
-Loss Function: **MeanSquaredError**
-
+**Loss Function: MeanSquaredError**
 <p float="left">
   <img src="images/19.png" width="300" />
   <img src="images/20.png" width="300" />
 </p>
-
 Confusion Matrix:
 <img src="images/21.png" width="300"/>
 
-Loss Function: Hinge Loss
-
+**Loss Function: Hinge Loss**
 <p float="left">
   <img src="images/22.png" width="300" />
   <img src="images/23.png" width="300" />
 </p>
-
 Confusion Matrix:
 <img src="images/24.png" width="300"/>
 
-As it can be seen, in both cases the accuracy is worse than the categorical_crossentropy loss function. So, it can be concluded that the best loss function is the categorical_crossentropy loss.
+Categorical cross-entropy proved to be the most effective loss function.
 
-We change the network's optimizer and examine the effect of different optimizers on the network's accuracy. 
+### Optimizer Comparison
 
-Optimizer = **Adam**
+We compared the performance of different optimizers:
+
+**Optimizer: Adam**
 <p float="left">
   <img src="images/25.png" width="300" />
   <img src="images/26.png" width="300" />
 </p>
 
-Optimizer = **RMSprop**
+**Optimizer: RMSprop**
 <p float="left">
   <img src="images/27.png" width="300" />
   <img src="images/28.png" width="300" />
 </p>
 
-As it can be seen, the accuracy is about 0.445 which means the RMSprop optimizer is worse than the stochastic gradient descent optimizer.
+RMSprop performed worse compared to SGD in terms of accuracy.
 
-According to the above results, the best model has the parameters as below:
+### Best Model Summary
 
-batch size = 256
+After various experiments, the best-performing model was configured as follows:
 
-optimizer: SGD
-
-Loss Function: categorical class entropy
-
-Activation Functions: ReLU, ReLU, Softmax
-
-These are the results of the final model:
+- **Batch size**: 256
+- **Optimizer**: SGD
+- **Loss Function**: Categorical Crossentropy
+- **Activation Functions**: ReLU, ReLU, Softmax
 
 <p float="left">
   <img src="images/29.png" width="300" />
   <img src="images/30.png" width="300" />
 </p>
-
 Confusion Matrix:
 <img src="images/31.png" width="300"/>
 
-We report other evaluation metrics, including F-Score, and Precision.
+Additionally, we report the F1 Score and Precision:
 
 ```
-F1 Score =  0.5298009011267364
-Precision Score =  0.5394033772373297
+F1 Score = 0.5298
+Precision Score = 0.5394
 ```
 
-Part2: MLP+CNN model
+
+---
+
+## Part 2: MLP + CNN Model
+
+To enhance the classifier’s performance, we added convolutional layers to the best MLP model obtained in Part 1.
+
+### Model with Convolutional Layers
+
+We incorporated pooling and batch normalization layers to further improve performance:
+
+<p float="left">
+  <img src="images/32.png" width="300" />
+  <img src="images/33.png" width="300" />
+</p>
+Confusion Matrix:
+<img src="images/34.png" width="300"/>
+
+### Dropout Layer
+
+Adding dropout layers improved accuracy and reduced loss:
+
+<p float="left">
+  <img src="images/35.png" width="300" />
+  <img src="images/36.png" width="300" />
+</p>
+Confusion Matrix:
+<img src="images/37.png" width="300"/>
+
+### Early Stopping
+
+We implemented early stopping to prevent overfitting:
+
+<p float="left">
+  <img src="images/38.png" width="300" />
+  <img src="images/39.png" width="300" />
+</p>
+Confusion Matrix:
+<img src="images/40.png" width="300"/>
+
+---
+
+The final model achieved an accuracy of 0.70 on the test data and 0.99 on the training data.
